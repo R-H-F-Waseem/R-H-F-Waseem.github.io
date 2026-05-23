@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harris Waseem — Financial Analysis Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0d0d0d;
+      --paper: #f5f0e8;
+      --cream: #ede7d6;
+      --gold: #b8922a;
+      --gold-light: #d4a843;
+      --muted: #6b6456;
+      --border: #c8bfad;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--paper); color: var(--ink); font-family: 'Syne', sans-serif; overflow-x: hidden; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1000; opacity: 0.5;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 3rem;
+      background: rgba(245,240,232,0.9); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.55rem 1.4rem; border: 1.5px solid var(--ink); color: var(--ink); text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .nav-cta:hover { background: var(--ink); color: var(--paper); }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 8rem 3rem 4rem; gap: 4rem; position: relative; overflow: hidden; }
+    .hero::after { content: ''; position: absolute; right: -120px; top: 50%; transform: translateY(-50%); width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle, rgba(184,146,42,0.12) 0%, transparent 70%); pointer-events: none; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold); padding: 0.35rem 0.9rem; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.1s; }
+    .hero-tag::before { content: '◆'; font-size: 0.5rem; }
+    .hero-title { font-family: 'DM Serif Display', serif; font-size: clamp(3rem, 5.5vw, 5.5rem); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.75rem; opacity: 0; animation: fadeUp 0.7s ease forwards 0.25s; }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-body { font-size: 1.05rem; line-height: 1.75; color: var(--muted); max-width: 42ch; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.7s ease forwards 0.4s; }
+    .hero-actions { display: flex; gap: 1rem; opacity: 0; animation: fadeUp 0.7s ease forwards 0.55s; }
+    .btn-primary { display: inline-block; padding: 0.85rem 2.2rem; background: var(--ink); color: var(--paper); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+    .btn-primary:hover { background: var(--gold); transform: translateY(-2px); }
+    .btn-secondary { display: inline-block; padding: 0.85rem 2.2rem; border: 1.5px solid var(--border); color: var(--ink); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: border-color 0.2s, transform 0.2s; }
+    .btn-secondary:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+    /* HERO RIGHT STATS */
+    .hero-right { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; opacity: 0; animation: fadeIn 1s ease forwards 0.6s; }
+    .stat-card { background: var(--cream); border: 1px solid var(--border); padding: 1.75rem 1.5rem; }
+    .stat-card.accent { background: var(--ink); color: var(--paper); border-color: var(--ink); grid-column: span 2; display: flex; align-items: center; gap: 2rem; }
+    .stat-num { font-family: 'DM Serif Display', serif; font-size: 2.8rem; line-height: 1; color: var(--gold); }
+    .stat-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 0.4rem; }
+    .accent .stat-label { color: rgba(245,240,232,0.6); }
+    .stat-card.accent .stat-num { font-size: 3.5rem; }
+    .stat-desc { font-size: 0.9rem; color: rgba(245,240,232,0.75); line-height: 1.6; }
+
+    /* DIVIDER */
+    .section-divider { height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); margin: 0 3rem; }
+
+    /* SECTIONS */
+    section { padding: 6rem 3rem; }
+    .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 3.5rem; }
+    .section-num { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--gold); letter-spacing: 0.1em; }
+    .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -0.03em; line-height: 1.1; }
+
+    /* PROJECTS */
+    #projects { background: var(--cream); }
+    .filter-bar { display: flex; gap: 0.5rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+    .filter-btn { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.45rem 1.1rem; border: 1.5px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover, .filter-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+    .project-card { background: var(--paper); border: 1px solid var(--border); padding: 2rem; cursor: pointer; transition: transform 0.25s, box-shadow 0.25s; position: relative; overflow: hidden; }
+    .project-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); transform: scaleY(0); transform-origin: bottom; transition: transform 0.3s ease; }
+    .project-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(13,13,13,0.1); }
+    .project-card:hover::before { transform: scaleY(1); }
+    .card-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .card-type { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.65rem; border: 1px solid var(--border); color: var(--muted); }
+    .card-type.excel { border-color: #2e7d32; color: #2e7d32; }
+    .card-type.word { border-color: #1565c0; color: #1565c0; }
+    .card-type.pptx { border-color: #b83c1a; color: #b83c1a; }
+    .card-type.ipynb { border-color: #6a1ec2; color: #6a1ec2; }
+    .card-date { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); margin-left: auto; }
+    .card-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; line-height: 1.25; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .card-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+    .card-tag { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: var(--cream); padding: 0.25rem 0.65rem; color: var(--muted); }
+    .card-actions { display: flex; gap: 0.75rem; }
+    .card-btn { flex: 1; text-align: center; padding: 0.6rem 1rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--border); color: var(--ink); transition: all 0.2s; cursor: pointer; background: transparent; font-family: 'Syne', sans-serif; }
+    .card-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .card-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .card-btn.primary:hover { background: var(--gold); border-color: var(--gold); }
+
+    /* ABOUT */
+    #about { display: grid; grid-template-columns: 1fr 1.6fr; gap: 5rem; align-items: start; }
+    .about-sticky { position: sticky; top: 6rem; }
+    .about-subtitle { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .about-title { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1.5rem; }
+    .about-body p { font-size: 1rem; line-height: 1.8; color: var(--muted); margin-bottom: 1.25rem; }
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 2rem; }
+    .skill-item { background: var(--paper); padding: 1.25rem 1.5rem; }
+    .skill-name { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .skill-bar { height: 2px; background: var(--border); position: relative; }
+    .skill-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--gold); }
+
+    /* CONTACT */
+    #contact { background: var(--ink); color: var(--paper); text-align: center; }
+    #contact .section-num { color: var(--gold); }
+    #contact .section-title { color: var(--paper); }
+    .contact-body { max-width: 55ch; margin: 0 auto 3rem; font-size: 1.05rem; line-height: 1.8; color: rgba(245,240,232,0.65); }
+    .contact-form { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; text-align: left; }
+    .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.5); }
+    .form-input, .form-textarea { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.15); color: var(--paper); padding: 0.85rem 1rem; font-family: 'Syne', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; width: 100%; }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(245,240,232,0.25); }
+    .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-textarea { min-height: 130px; resize: vertical; }
+    .form-submit { padding: 0.95rem; background: var(--gold); color: var(--ink); border: none; font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, transform 0.2s; margin-top: 0.5rem; }
+    .form-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer { padding: 2rem 3rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); text-decoration: none; }
+    .footer-logo span { color: var(--gold); }
+    .footer-copy { font-size: 0.72rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+    /* ── PREVIEW PANEL ── */
+    .preview-overlay {
+      position: fixed; inset: 0; background: rgba(13,13,13,0.8);
+      z-index: 600; display: flex; align-items: stretch;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      backdrop-filter: blur(6px);
+    }
+    .preview-overlay.open { opacity: 1; pointer-events: all; }
+
+    .preview-panel {
+      position: relative;
+      display: flex; flex-direction: column;
+      width: min(92vw, 1000px);
+      max-height: 92vh;
+      margin: auto;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      transform: translateY(30px);
+      transition: transform 0.35s ease;
+      overflow: hidden;
+    }
+    .preview-overlay.open .preview-panel { transform: translateY(0); }
+
+    .preview-header {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .preview-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem; letter-spacing: -0.02em;
+      flex: 1; min-width: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .preview-badge {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.25rem 0.7rem; border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .preview-badge.excel { border-color: #2e7d32; color: #2e7d32; }
+    .preview-badge.word  { border-color: #1565c0; color: #1565c0; }
+    .preview-badge.pptx  { border-color: #b83c1a; color: #b83c1a; }
+    .preview-badge.ipynb { border-color: #6a1ec2; color: #6a1ec2; }
+
+    .preview-close {
+      background: none; border: 1.5px solid var(--border);
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1rem; color: var(--muted);
+      transition: all 0.2s; flex-shrink: 0;
+    }
+    .preview-close:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+    /* Tab bar */
+    .preview-tabs {
+      display: flex; gap: 0; border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .preview-tab {
+      padding: 0.7rem 1.4rem; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; border: none; background: transparent;
+      color: var(--muted); border-bottom: 2px solid transparent;
+      transition: color 0.2s; font-family: 'Syne', sans-serif;
+      margin-bottom: -1px;
+    }
+    .preview-tab.active { color: var(--ink); border-bottom-color: var(--gold); }
+    .preview-tab:hover { color: var(--ink); }
+
+    /* Content area */
+    .preview-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+
+    /* Overview pane */
+    .pane { display: none; flex-direction: column; flex: 1; }
+    .pane.active { display: flex; }
+
+    .overview-pane { padding: 2rem 1.75rem; }
+    .ov-section { margin-bottom: 2rem; }
+    .ov-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+    .ov-text { font-size: 0.95rem; line-height: 1.75; color: var(--muted); }
+    .ov-features { list-style: none; }
+    .ov-features li { font-size: 0.9rem; color: var(--muted); padding: 0.5rem 0; border-bottom: 1px solid var(--cream); display: flex; gap: 0.75rem; }
+    .ov-features li::before { content: '→'; color: var(--gold); flex-shrink: 0; }
+    .ov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .ov-stat { background: var(--cream); border: 1px solid var(--border); padding: 1rem 1.25rem; }
+    .ov-stat-num { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--gold); }
+    .ov-stat-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 0.25rem; }
+
+    /* Content pane — rich text viewer */
+    .content-pane { padding: 2rem 1.75rem; }
+    .content-pane h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin: 1.5rem 0 0.75rem; color: var(--ink); }
+    .content-pane h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin: 1.25rem 0 0.5rem; color: var(--ink); }
+    .content-pane p { font-size: 0.9rem; line-height: 1.8; color: var(--muted); margin-bottom: 0.9rem; }
+    .content-pane ul, .content-pane ol { margin: 0.5rem 0 1rem 1.25rem; }
+    .content-pane li { font-size: 0.9rem; line-height: 1.7; color: var(--muted); margin-bottom: 0.25rem; }
+    .content-pane table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 1rem 0; }
+    .content-pane th { background: var(--cream); padding: 0.6rem 0.8rem; text-align: left; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); }
+    .content-pane td { padding: 0.55rem 0.8rem; border: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+    .content-pane strong { color: var(--ink); }
+
+    /* Data pane — table/grid for Excel */
+    .data-pane { padding: 1.5rem 1.75rem; overflow-x: auto; }
+    .data-table-wrap { overflow-x: auto; }
+    .data-table { border-collapse: collapse; font-size: 0.78rem; font-family: 'DM Mono', monospace; width: 100%; }
+    .data-table th { background: var(--ink); color: var(--paper); padding: 0.5rem 0.8rem; text-align: left; white-space: nowrap; font-size: 0.65rem; letter-spacing: 0.06em; border: 1px solid rgba(255,255,255,0.1); }
+    .data-table td { padding: 0.45rem 0.8rem; border: 1px solid var(--border); color: var(--muted); white-space: nowrap; }
+    .data-table tr:nth-child(even) td { background: var(--cream); }
+    .data-table td.num { text-align: right; color: var(--gold); }
+    .data-table td.pos { color: #2e7d32; }
+    .data-table td.neg { color: #b83c1a; }
+
+    /* Slides pane */
+    .slides-pane { padding: 1.75rem; }
+    .slides-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .slide-card { background: var(--cream); border: 1px solid var(--border); padding: 1.25rem; }
+    .slide-num { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+    .slide-title { font-family: 'DM Serif Display', serif; font-size: 1rem; margin-bottom: 0.5rem; }
+    .slide-body { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+    /* Preview footer */
+    .preview-footer {
+      padding: 1rem 1.75rem; border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1rem;
+      flex-shrink: 0; background: var(--paper);
+    }
+    .preview-footer-note { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); flex: 1; }
+    .preview-dl-btn {
+      padding: 0.6rem 1.5rem; background: var(--ink); color: var(--paper);
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; text-decoration: none;
+      border: none; cursor: pointer; font-family: 'Syne', sans-serif;
+      transition: background 0.2s;
+    }
+    .preview-dl-btn:hover { background: var(--gold); }
+
+    /* MODAL (details) */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(13,13,13,0.75); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(4px); }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: var(--paper); border: 1px solid var(--border); max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 3rem; transform: translateY(20px); transition: transform 0.3s; }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+    .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; letter-spacing: -0.02em; line-height: 1.2; max-width: 80%; }
+    .modal-close { background: none; border: 1.5px solid var(--border); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; color: var(--muted); flex-shrink: 0; transition: all 0.2s; }
+    .modal-close:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn  { from { opacity: 0; } to   { opacity: 1; } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+      .hero-right { display: none; }
+      section { padding: 4rem 1.5rem; }
+      #about { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-sticky { position: static; }
+      .section-divider { margin: 0 1.5rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .preview-panel { width: 98vw; max-height: 96vh; }
+      .ov-grid { grid-template-columns: 1fr; }
+      .slides-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><span>H</span>arris <span>W</span>aseem</a>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get in touch</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="hero-tag">Financial Analysis Portfolio</div>
+    <h1 class="hero-title">Where <em>my</em><br>analysis lives</h1>
+    <p class="hero-body">A collection of Excel models, Word reports, and presentations spanning DCF valuations, M&amp;A evaluations, trading analyses, and SaaS strategy — built from real coursework and market research.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#about" class="btn-secondary">About Me</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-card">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Projects Published</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Asset Classes Covered</div>
+    </div>
+    <div class="stat-card accent">
+      <div>
+        <div class="stat-num">$25B+</div>
+        <div class="stat-label">Revenue Modeled (SYK)</div>
+      </div>
+      <p class="stat-desc">Stryker DCF extending through 2031 with WACC, sensitivity tables, and peer analysis.</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">01 —</span>
+    <h2 class="section-title">Projects</h2>
+  </div>
+  <div class="filter-bar reveal">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="excel">Excel</button>
+    <button class="filter-btn" data-filter="word">Word</button>
+    <button class="filter-btn" data-filter="pptx">PowerPoint</button>
+    <button class="filter-btn" data-filter="dcf">DCF</button>
+    <button class="filter-btn" data-filter="ma">M&A</button>
+    <button class="filter-btn" data-filter="trading">Trading</button>
+    <button class="filter-btn" data-filter="saas">SaaS</button>
+    <button class="filter-btn" data-filter="econometrics">Econometrics</button>
+  </div>
+  <div class="projects-grid" id="projectsGrid"></div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-sticky">
+    <div class="about-subtitle">About Me</div>
+    <h2 class="about-title">Data<br><em style="font-style:italic;color:var(--gold)">analyst</em><br>&amp;<br>Financial<br><em style="font-style:italic;color:var(--gold)">modeler</em></h2>
+  </div>
+  <div class="about-body reveal">
+    <p>I'm Harris Waseem — a finance and data analyst with 4+ years of active trading experience focused on options and technical analysis. My academic and personal work spans DCF modeling, M&amp;A evaluation, and market strategy, bridging quantitative rigor with real trading intuition.</p>
+    <p>My projects draw on Bloomberg terminal data, multi-year company financials, and original WACC/FCF frameworks — applied to real companies like Stryker Corporation, and real markets I've traded actively.</p>
+    <p>Alongside financial modeling, I co-founded FINDEX, a SaaS-based financial article aggregation engine designed to democratize access to institutional-quality market data.</p>
+    <div class="skills-grid">
+      <div class="skill-item">
+        <div class="skill-name">DCF Modeling</div>
+        <div class="skill-bar"><div class="skill-bar-fill" style="width:95%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">M&A / SWOT Analysis</div>
+        <div class="skill-bar"><div class="skill-bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Options & Technical Analysis</div>
+        <div class="skill-bar"><div class="skill-bar-fill" style="width:92%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Excel (Advanced)</div>
+        <div class="skill-bar"><div class="skill-bar-fill" style="width:97%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Financial Writing</div>
+        <div class="skill-bar"><div class="skill-bar-fill" style="width:85%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">SaaS Strategy</div>
+        <div class="skill-bar"><div class="skill-bar-fill" style="width:78%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal" style="justify-content:center;">
+    <span class="section-num">03 —</span>
+    <h2 class="section-title">Get in Touch</h2>
+  </div>
+  <p class="contact-body reveal">Interested in collaborating, reviewing my work, or just want to discuss markets and modeling? Reach out below.</p>
+  <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+    <div class="form-field"><label class="form-label">Name</label><input class="form-input" type="text" placeholder="Your name" required /></div>
+    <div class="form-field"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="your@email.com" required /></div>
+    <div class="form-field"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="What are you working on?" required></textarea></div>
+    <button class="form-submit" type="submit">Send Message →</button>
+  </form>
+</section>
+
+<footer>
+  <a href="#" class="footer-logo"><span>H</span>arris <span>W</span>aseem</a>
+  <span class="footer-copy">© 2026 — All rights reserved</span>
+</footer>
+
+<!-- ══ PREVIEW PANEL ══ -->
+<div class="preview-overlay" id="previewOverlay" onclick="closePanelOnOverlay(event)">
+  <div class="preview-panel" id="previewPanel">
+    <div class="preview-header">
+      <span class="preview-badge" id="prevBadge"></span>
+      <span class="preview-title" id="prevTitle"></span>
+      <button class="preview-close" onclick="closePreview()">✕</button>
+    </div>
+    <div class="preview-tabs" id="prevTabs"></div>
+    <div class="preview-body" id="prevBody"></div>
+    <div class="preview-footer">
+      <span class="preview-footer-note" id="prevNote"></span>
+      <button class="preview-dl-btn" onclick="triggerDownload()">Download File ↓</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+//  PROJECT DATA — drawn from your real files
+// ════════════════════════════════════════════
+const projects = [
+  {
+    id: 'syk-dcf',
+    title: 'Stryker Corporation (SYK) — Full DCF Evaluation',
+    type: 'excel',
+    date: 'Mar – May 2026',
+    course: 'BUS 341W',
+    desc: 'Multi-sheet DCF model for Stryker (NYSE: SYK) including three valuation scenarios, WACC dashboard, peer analysis against JNJ/ABT/BSX/EW, and a 5-year forward FCF projection through 2031.',
+    tags: ['dcf', 'wacc', 'ma', 'meditec'],
+    features: [
+      'Three DCF approaches: snapshot 2026, forward 2027, and advanced 2026–2031',
+      'WACC of 8.76% with 60-month beta (~0.93) vs. S&P 500',
+      'Bloomberg-derived revenue data FY2019–FY2027 (~$25B est. 2025)',
+      'Sensitivity table across WACC (7.5%–10%) × terminal growth (2%–4.5%)',
+      'Peer WACC comparison: JNJ, ABT, BSX, Edwards Lifesciences',
+      'Rule of 40 analysis & segment revenue split (MedSurg vs. Orthopedics)',
+      'Summary statistics: min/max/avg/stdev/median, DAVERAGE, COUNTIFS',
+      'Implied share price range: $212 (conservative) – $355 (Bloomberg)'
+    ],
+    keyStats: [
+      { num: '$282', label: 'Implied Share Price (Adv. DCF)' },
+      { num: '8.76%', label: 'WACC' },
+      { num: '$25.1B', label: 'FY2025 Revenue Est.' },
+      { num: '5 peers', label: 'Comparable Companies' }
+    ],
+    previewType: 'excel',
+    file: 'H_Waseem_SYK_DCF_Full.xlsx'
+  },
+  {
+    id: 'syk-swot',
+    title: 'Stryker Corporation — M&A White Paper & SWOT',
+    type: 'word',
+    date: 'May 2026',
+    course: 'BUS 341W',
+    desc: 'Comprehensive white paper evaluating Stryker as an acquisition target: MedTech sector analysis, SWOT breakdown, valuation assessment, and a tentative M&A entry strategy using shorts and hedged long calls.',
+    tags: ['ma', 'swot', 'meditec', 'valuation'],
+    features: [
+      'MedTech sector analysis: Orthopedics, Neurotechnology, and Med-Surg sub-industries',
+      'Full SWOT analysis — diversification strengths, earnings sensitivity weaknesses',
+      'Three DCF scenarios benchmarked against Bloomberg ($355.77 vs. $212.85 personal)',
+      '"Rule of 40" applied to MedTech to assess acquisition justification',
+      'Earnings sensitivity analysis: recent ~10–20% drop following miss & cyber-attack',
+      'M&A entry strategy: short position with long calls as hedge at $290–$295 strike',
+      'Bloomberg terminal data FY2019–FY2025; peer comparable pricing',
+      'Concluding framework for patient capital deployment and timeline monitoring'
+    ],
+    keyStats: [
+      { num: '32%+', label: 'Personal Est. Overvaluation' },
+      { num: '$282', label: 'Conservative 5-Yr Price Target' },
+      { num: '~20%', label: 'Post-Earnings Drawdown' },
+      { num: '8.76%', label: 'WACC' }
+    ],
+    previewType: 'word',
+    file: 'Stryker_SWOT_Report_HWaseem.docx'
+  },
+  {
+    id: 'portfolio-report',
+    title: 'Portfolio Trading Report — Technical Analysis in Practice',
+    type: 'word',
+    date: 'Apr 2026',
+    course: 'BUS 341W',
+    desc: 'A reflective trading report detailing active trades taken in a simulated $1M portfolio using technical analysis (T.A). Covers mutual fund strategy, a winning PayPal swing trade, and a candid post-mortem on Uber.',
+    tags: ['trading', 'technical-analysis', 'portfolio'],
+    features: [
+      '~$450K diversified across VASVX (Vanguard Value), INIIX (VanEck Gold), FIQRX (Fidelity Commodity)',
+      'Gold hedging strategy — INIIX surged $43→$51 during Iran conflict volatility spike',
+      'PayPal (PYPL) swing trade: double-bottom + falling wedge breakout, ~20–28% gain',
+      'Full candlestick pattern analysis: bearish channels, consolidation, support/resistance',
+      'Uber (UBER) post-mortem: 6 averaging-down orders, ~5% net gain — lesson in ego and exits',
+      'Discussion of IV crush, momentum traps, and false breakouts in options trading',
+      'Overall portfolio: 8%+ gain on $1M simulated account',
+      'Written for dual audience: accessible to newcomers, technically rigorous for traders'
+    ],
+    keyStats: [
+      { num: '8%+', label: 'Portfolio Return' },
+      { num: '$1M', label: 'Simulated Portfolio' },
+      { num: '~28%', label: 'PayPal Gain (½ position)' },
+      { num: '4 yrs', label: 'Options Trading Experience' }
+    ],
+    previewType: 'word',
+    file: 'Portfolio_Report_HWaseem.docx'
+  },
+  {
+    id: 'findex-plan',
+    title: 'FINDEX — SaaS Financial Article Engine: Marketing Plan',
+    type: 'word',
+    date: 'Oct 2025',
+    course: 'BUS 243',
+    desc: 'Full marketing plan for FINDEX, a co-founded SaaS financial article aggregation and indexing engine designed to be a cost-effective Bloomberg alternative for individual investors and small firms.',
+    tags: ['saas', 'strategy', 'marketing'],
+    features: [
+      'FINDEX positions as "the poor man\'s Bloomberg Terminal" — NLP-based article tokenization',
+      'Dual B2C / B2B model: Basic (free), Pro ($20/mo), Enterprise ($75/mo)',
+      'Target market: finance students, independent investors, small advisory firms',
+      'Financial analytics market projected to grow from $8B (2022) to $18.7B (2030)',
+      'SWOT: strength in AI-curated ranking; weakness in brand recognition & funding',
+      'Competitor analysis: Bloomberg (~$25K/yr), FactSet, Yahoo Finance',
+      'Revenue projection: 500–700 users at 6 months, $10K/mo est.; profitability by Year 3',
+      'Implementation: social media pre-market posts → subscription gating → enterprise API'
+    ],
+    keyStats: [
+      { num: '$20/mo', label: 'Pro Tier Pricing' },
+      { num: '1,500', label: 'Target Users (18 months)' },
+      { num: '$18.7B', label: 'Market Size by 2030' },
+      { num: 'Year 3', label: 'Profitability Target' }
+    ],
+    previewType: 'word',
+    file: 'FA_MarketingPlan_BUS243__Final_Fixed.docx'
+  },
+  {
+    id: 'findex-deck',
+    title: 'FINDEX — Investor Pitch Deck',
+    type: 'pptx',
+    date: 'Dec 2025',
+    course: 'BUS 243',
+    desc: '13-slide investor-ready presentation for FINDEX covering the problem, market opportunity, platform capabilities, SWOT, target market, pricing tiers, and conclusion.',
+    tags: ['saas', 'strategy', 'pitch'],
+    features: [
+      '13 slides: problem → solution → market → SWOT → pricing → conclusion',
+      'Market opportunity: fragmented, unstructured financial data with no mid-market solution',
+      'Strategic goals: 1,500 users in 18 months; enterprise launch Year 2; profitable Year 3',
+      'Competitive moat: proprietary NLP tokenization & correlation-based article ranking',
+      'Target segments: finance students, individual investors, small firms & universities',
+      'Pricing: Free / Pro $20/mo / Enterprise $75/mo with custom dashboards',
+      'SWOT summary: affordable & simple UI vs. Bloomberg/FactSet incumbents',
+      'Positioned as "Accessible Bloomberg Alternative"'
+    ],
+    keyStats: [
+      { num: '13', label: 'Slides' },
+      { num: '$75/mo', label: 'Enterprise Tier' },
+      { num: '3', label: 'Subscription Tiers' },
+      { num: 'Year 2', label: 'Enterprise Launch' }
+    ],
+    previewType: 'slides',
+    file: 'BUS243_HW_HS.pptx'
+  },
+  {
+    id: 'econometrics',
+    title: 'Econometrics with Python — Full Course Showcase',
+    type: 'ipynb',
+    date: 'Sep – Dec 2025',
+    course: 'ECON 387',
+    desc: '10 Jupyter notebooks spanning a full econometrics course: Python fundamentals, NumPy, OLS from scratch, panel data, time-series, machine learning (Ridge/LASSO/PCA), Monte Carlo simulation, and replication of published academic research.',
+    tags: ['econometrics', 'python', 'regression', 'timeseries', 'ml'],
+    features: [
+      'PS1–3: Python foundations — data types, NumPy arrays, AR(2) simulation, list/set/dict comprehensions',
+      'PS4: OLS estimator coded from scratch; Monte Carlo study of β̂₁ bias under endogeneity (5,000 iterations)',
+      'PS5: Full data pipeline — merging 30+ CSVs, panel cleaning, aggregation, 3-spec regression with stargazer output',
+      'PS6: ML on California school test scores — Ridge, LASSO, PCA with k-fold CV across k=2,065 predictors',
+      'PS7: Spurious regression Monte Carlo (T=100/500/1000); inflation AR(p) modeling with BIC/AIC selection',
+      'PS8: Panel data — democracy & income (195 countries, 1960–2000); CO₂ Environmental Kuznets Curve',
+      'Midterm: Replication of Nollenberger et al. (2016) — gender gap in math scores using PISA data & GGI',
+      'Final: ADF unit root tests, QLR structural break test, pseudo out-of-sample AR(2) inflation forecasting'
+    ],
+    keyStats: [
+      { num: '10', label: 'Notebooks' },
+      { num: '5,000', label: 'Monte Carlo Iterations' },
+      { num: 'k=2,065', label: 'Predictors (PS6 ML)' },
+      { num: '195', label: 'Countries in Panel (PS8)' }
+    ],
+    previewType: 'notebooks',
+    file: 'HW_Econometrics_Notebooks.zip'
+  }
+];
+
+// ════════════════════════════════════
+//  RICH PREVIEW CONTENT (per project)
+// ════════════════════════════════════
+const previewContent = {
+  'syk-dcf': {
+    tabs: ['Overview', 'Key Metrics', 'Valuation Data'],
+    panes: [
+      { type: 'overview' },
+      {
+        type: 'data',
+        headers: ['Year', 'Revenue ($M)', 'YoY Growth', 'EBITDA Margin', 'FCF ($M)', 'EPS', 'Net Debt ($M)'],
+        rows: [
+          ['FY 2019', '$14,884', '+9.4%', '29.3%', '$1,542', '$7.27', '$6,665'],
+          ['FY 2020', '$14,351', '−3.6%', '27.7%', '$2,790', '$6.43', '$10,967'],
+          ['FY 2021', '$17,108', '+19.2%', '28.6%', '$2,738', '$7.80', '$9,460'],
+          ['FY 2022', '$18,449', '+7.8%', '26.6%', '$2,036', '$8.05', '$11,120'],
+          ['FY 2023', '$20,498', '+11.1%', '26.9%', '$3,136', '$9.29', '$9,942'],
+          ['FY 2024', '$22,595', '+10.2%', '28.0%', '$3,487', '$10.90', '$9,104'],
+          ['FY 2025', '$25,116', '+11.2%', '28.9%', '$4,283', '$12.13', '$11,759'],
+          ['FY 2026E', '$27,317', '+8.8%', '28.7%', '$5,416', '$15.01', '$9,193'],
+          ['FY 2027E', '$29,603', '+8.4%', '29.1%', '$5,638', '$16.75', '$5,875'],
+        ],
+        notes: 'Source: Bloomberg Terminal data compiled March–May 2026. FY2026–2027 are projected figures.'
+      },
+      {
+        type: 'data',
+        headers: ['Scenario', 'EV ($M)', 'Net Debt ($M)', 'Equity Value ($M)', 'Implied Price', 'vs. Market'],
+        rows: [
+          ['Bloomberg Snapshot (2026)', '$146,697', '$9,193', '$134,437', '$355.77', '−13.8%'],
+          ['Personal Snapshot (2026)', '$91,461', '$9,193', '$82,268', '$212.85', '+44.1%'],
+          ['Personal Forward (2027)', '$94,205', '$5,875', '$85,012', '$228.54', '+34.2%'],
+          ['Advanced DCF (2026–2031)', '$118,366', '$9,193', '$109,173', '$282.47', '+8.6%'],
+        ],
+        notes: 'Market price at time of analysis: $285–307 per share. WACC: 8.76%. Terminal growth: 3.0%.'
+      }
+    ]
+  },
+  'syk-swot': {
+    tabs: ['Overview', 'SWOT Breakdown', 'Acquisition Strategy'],
+    panes: [
+      { type: 'overview' },
+      {
+        type: 'content',
+        html: `
+          <h2>SWOT Analysis</h2>
+          <h3>Strengths</h3>
+          <p>Stryker's greatest strength is its diversification across multiple high-value MedTech sub-industries — Orthopedics (~40% of revenue), Neurotechnology, and Medical-Surgical (~60% combined). This structure reduces revenue concentration risk while maintaining broad exposure to long-term healthcare demand.</p>
+          <h3>Weaknesses</h3>
+          <p>Premium market valuation demands near-perfect operational execution. Any earnings shortfall introduces disproportionate valuation compression. The company's three-sub-industry structure also compounds the regulatory, manufacturing, and compliance complexity typical of any specialized MedTech firm.</p>
+          <h3>Opportunities</h3>
+          <p>Aging global populations and rising demand for mobility-related procedures (joint replacements, hip implants) support multi-decade Orthopedics tailwinds. Robotic-assisted surgery platform adoption is accelerating — hospitals prioritize procedural efficiency, and Stryker is actively integrating precision robotics into its system portfolio.</p>
+          <h3>Threats</h3>
+          <p>In a market where startup competition is effectively eliminated by capital requirements and FDA timelines, large incumbents (J&J, Boston Scientific, Abbott) compete via R&D spending power. The most significant current risk is valuation compression: Stryker's recent earnings miss (−2¢/share) triggered a ~10–20% stock decline, demonstrating the sensitivity of a premium-priced compounder to any execution shortfall.</p>
+          <h2>Rule of 40 Analysis</h2>
+          <p>From FY2019–FY2025, Stryker only exceeded the Rule of 40 threshold in FY2021 (47%) and FY2025 (40.1%). This inconsistency suggests that, while the company is fundamentally strong, current market valuation may be pricing in sustained outperformance that historical data does not consistently support.</p>
+        `
+      },
+      {
+        type: 'content',
+        html: `
+          <h2>M&A Entry Strategy</h2>
+          <p>Stryker represents a high-quality but currently expensive acquisition target. Acquiring at current levels would require paying a premium atop already optimistic growth and multiple assumptions.</p>
+          <h3>Recommended Approach</h3>
+          <ul>
+            <li>Monitor for a pullback toward the conservative DCF baseline (~$282/share).</li>
+            <li>Initiate a short position if the stock trades above conservative fair value.</li>
+            <li>Hedge with long calls at $290–$295 strike to offset short-side losses if the stock rallies.</li>
+            <li>Use the hedge structure to build an entry at a more attractive price — either via exercising calls on a rally or covering the short on a pullback.</li>
+          </ul>
+          <h3>Rationale</h3>
+          <p>The recent cyber-attack (March 2026) and earnings miss demonstrated how embedded optimism creates fragility. Stryker's underlying business remains structurally sound — the question is one of timing and price. Patient capital, paired with careful execution monitoring, should reward a disciplined entry in the MedTech sector's most resilient compounder.</p>
+          <h3>Key Metrics to Watch</h3>
+          <ul>
+            <li>Quarterly EPS vs. consensus — sensitivity is extreme; track closely.</li>
+            <li>Rule of 40 performance — sustained above 40% justifies premium retention.</li>
+            <li>Robotic surgery platform adoption rate — a key upside optionality driver.</li>
+            <li>Regulatory pipeline and FDA approval timelines for new product lines.</li>
+          </ul>
+        `
+      }
+    ]
+  },
+  'portfolio-report': {
+    tabs: ['Overview', 'Trade Analysis', 'Lessons Learned'],
+    panes: [
+      { type: 'overview' },
+      {
+        type: 'content',
+        html: `
+          <h2>Mutual Fund Positions (~45% of Portfolio)</h2>
+          <table>
+            <tr><th>Fund</th><th>Ticker</th><th>Thesis</th><th>Outcome</th></tr>
+            <tr><td>Vanguard Selected Value</td><td>VASVX</td><td>Undervalued financial services exposure; active management</td><td>Positive</td></tr>
+            <tr><td>VanEck International Gold I</td><td>INIIX</td><td>Portfolio hedge vs. VIX/volatility; safe-haven in conflict</td><td><strong>$43→$51 during Iran conflict</strong></td></tr>
+            <tr><td>Fidelity Global Commodity</td><td>FIQRX</td><td>Commodity diversifier; energy/metals/agriculture hedge</td><td>$25.23→$28.25 on supply shock</td></tr>
+          </table>
+          <h2>PayPal (PYPL) — Winning Swing Trade</h2>
+          <p>Entered 1,500 shares at $40.20 on February 11, 2026. Setup: double-bottom at daily lows following a $23 drop on a 5-cent earnings miss (overreaction thesis). Secondary pattern: falling wedge consolidation approaching apex — sellers exhausted.</p>
+          <p>Added 750 shares at $38.69 (double-down at multi-year low). Sold half at $47.28 (~20% gain, ~12 days later). Sold remainder at $50.80 (~28% gain, ~45 days). Total position: <strong>$120,450 entry → profitable exit across both tranches.</strong></p>
+          <h2>Uber (UBER) — Cautionary Trade</h2>
+          <p>Entered based on visual T.A without properly charting the setup on ThinkorSwim. Missed earnings by 9¢ in early February; price went against the position two days later. Averaged down 6 times. Net gain: ~5% on $200K — but $200K was locked up that could have compounded elsewhere (missed XOM, AMD opportunities).</p>
+        `
+      },
+      {
+        type: 'content',
+        html: `
+          <h2>Key Lessons</h2>
+          <h3>1. Technical Analysis Requires Discipline, Not Intuition Alone</h3>
+          <p>The Uber trade failed not because the method was wrong, but because the process was skipped — the chart was never properly pulled and analyzed on the brokerage platform. Technical analysis gives an edge only when applied rigorously, not eyeballed.</p>
+          <h3>2. Ego and Emotion Have No Place in the Markets</h3>
+          <p>Averaging down on Uber six times was an emotional response to a bad entry, not a strategic decision. Recognizing this distinction — and cutting losses cleanly — is what separates developing traders from professionals.</p>
+          <h3>3. Opportunity Cost Is a Real Loss</h3>
+          <p>The $200K tied up in Uber wasn't just underperforming — it was actively preventing redeployment into higher-conviction setups. Liquidity and optionality have intrinsic value that most new traders underestimate.</p>
+          <h3>4. Hedging Works — When Applied Thoughtfully</h3>
+          <p>INIIX and FIQRX proved their hedging thesis during the Iran conflict volatility spike. The gold position alone went from $43.18 to a high of $51.33, meaningfully offsetting losses in other volatile positions.</p>
+          <h3>5. Volume and Volatility Indicators Are Non-Negotiable</h3>
+          <p>The PayPal trade worked because the analysis went beyond price action — volume confirmation at the double-bottom was what transformed a speculative entry into a high-conviction position. Checking fundamentals like this before entry should be habitual.</p>
+        `
+      }
+    ]
+  },
+  'findex-plan': {
+    tabs: ['Overview', 'Market & SWOT', 'Pricing & Projections'],
+    panes: [
+      { type: 'overview' },
+      {
+        type: 'content',
+        html: `
+          <h2>Market Opportunity</h2>
+          <p>The financial analytics market is projected to expand from approximately $8B in 2022 to $18.7B by 2030 (CAGR ~11.4%). The broader data analytics market is expected to grow from $69.5B in 2024 to ~$302B by 2030. FINDEX enters as a mid-market SaaS player, bridging the gap between free but shallow tools (Yahoo Finance, Google Finance) and expensive institutional platforms (Bloomberg at ~$25K/year, FactSet, Capital IQ).</p>
+          <h2>SWOT Summary</h2>
+          <table>
+            <tr><th>Strengths</th><th>Weaknesses</th></tr>
+            <tr><td>Affordable SaaS pricing; proprietary NLP tokenization; dual B2C + B2B model; simple UI</td><td>No brand recognition; limited initial funding; needs data licensing agreements; startup risk</td></tr>
+            <tr><th>Opportunities</th><th>Threats</th></tr>
+            <tr><td>Rising financial literacy demand; university partnerships; AI/NLP SaaS adoption; incubator access</td><td>Bloomberg/FactSet could lower prices; regulatory compliance risk; customer skepticism toward new entrants</td></tr>
+          </table>
+          <h2>Competitive Landscape</h2>
+          <p><strong>Bloomberg Terminal:</strong> Comprehensive but ~$25,000/year — effectively inaccessible for individuals. <strong>FactSet/Capital IQ:</strong> Institutional, complex, and costly. <strong>Yahoo/Google Finance:</strong> Free but lacks depth, reliability, and prioritization. FINDEX sits in the gap: professional-grade accuracy at consumer-friendly prices, powered by NLP-driven article curation.</p>
+        `
+      },
+      {
+        type: 'data',
+        headers: ['Tier', 'Price', 'Target Audience', 'Key Features'],
+        rows: [
+          ['Basic (Free)', '$0/mo', 'Individual users, students', 'Limited aggregation & ranking'],
+          ['Pro', '$20/mo', 'Finance professionals, investors', 'Full access, sector filters, keyword alerts'],
+          ['Enterprise', '$75/mo', 'Small firms, universities', 'API access, team dashboards, portfolio recognition'],
+        ],
+        notes: 'Revenue projection: 100–200 users at launch ($1.5K–$3K/mo) → 500–700 users at 6 months (~$10K/mo). Profitability target: Year 3. Enterprise B2B launch: Year 2.'
+      }
+    ]
+  },
+  'econometrics': {
+    tabs: ['Overview', 'Notebook Index', 'Code Highlights'],
+    panes: [
+      { type: 'overview' },
+      {
+        type: 'content',
+        html: `
+          <h2>Course Notebook Index — ECON 387</h2>
+          <table>
+            <tr><th>Notebook</th><th>Topic</th><th>Key Libraries</th></tr>
+            <tr><td>PS1</td><td>Python fundamentals: data types, strings, lists, dicts, sets; deep copy problem</td><td>math, built-ins</td></tr>
+            <tr><td>PS2</td><td>NumPy arrays & matrix algebra: transpose, dot product, random draws, reshape, ravel</td><td>numpy</td></tr>
+            <tr><td>PS3</td><td>AR(2) process simulation (while loop); control flow; quadratic formula function; comprehensions</td><td>numpy, matplotlib</td></tr>
+            <tr><td>PS4</td><td>OLS estimator coded from scratch; 5,000-iteration Monte Carlo; endogeneity bias demo; bar/pie charts</td><td>numpy, matplotlib</td></tr>
+            <tr><td>PS5</td><td>Panel data wrangling: 20+ state-level CSV files merged (mortality, income, education, expenditure); fixed-effects regression with stargazer output</td><td>pandas, statsmodels, os</td></tr>
+            <tr><td>PS6</td><td>High-dimensional ML (k=2,065 predictors): Ridge, Lasso (cross-validated), PCA on CA school test scores; in-sample vs. out-of-sample MSFE</td><td>sklearn, statsmodels</td></tr>
+            <tr><td>PS7</td><td>Spurious regression Monte Carlo (T=100/500/1000, 1,000 reps); PCECTPI inflation AR(p) modeling; BIC/AIC lag selection; out-of-sample forecast</td><td>pandas_datareader, statsmodels</td></tr>
+            <tr><td>PS8</td><td>Panel regression: democracy vs. income (195 countries, 1960–2000); CO₂ emissions vs. GDP (Environmental Kuznets Curve, 48 U.S. states)</td><td>pandas, statsmodels</td></tr>
+            <tr><td>Midterm</td><td>Replication of Nollenberger et al. (2016): math gender gap using PISA data; GGI scatter + OLS line; 6-specification fixed-effects table</td><td>pandas, statsmodels, stargazer</td></tr>
+            <tr><td>Final</td><td>ADF unit root test (with/without trend); QLR structural break test (15% trimming); pseudo out-of-sample AR(2) RMSFE for inflation 2003Q1–2019Q4</td><td>pandas_datareader, statsmodels</td></tr>
+          </table>
+        `
+      },
+      {
+        type: 'content',
+        html: `
+          <h2>Selected Code Highlights</h2>
+
+          <h3>PS4 — OLS from Scratch + Monte Carlo</h3>
+          <pre style="background:var(--cream);padding:1rem;font-family:'DM Mono',monospace;font-size:0.78rem;overflow-x:auto;line-height:1.6;border:1px solid var(--border);">def slope(x, y):
+    y_m, x_m = np.mean(y), np.mean(x)
+    bhat1 = np.sum((x-x_m)*(y-y_m)) / np.sum((x-x_m)**2)
+    return bhat1
+
+# 5,000 Monte Carlo iterations
+tmp = np.empty(5000)
+for i in range(5000):
+    X = np.random.randn(1000)
+    u = np.random.randn(1000)
+    Y = -0.3 + 1.7*X + u
+    tmp[i] = slope(X, Y)
+print(np.mean(tmp))  # ≈ 1.700</pre>
+
+          <h3>PS7 — Spurious Regression Monte Carlo</h3>
+          <pre style="background:var(--cream);padding:1rem;font-family:'DM Mono',monospace;font-size:0.78rem;overflow-x:auto;line-height:1.6;border:1px solid var(--border);">def monte_carlo(T):
+    Y, X = np.zeros(T), np.zeros(T)
+    Y[0] = 0.75 + np.random.normal()
+    X[0] = 0.85 + np.random.normal()
+    for t in range(1, T):
+        Y[t] = 0.75 + Y[t-1] + np.random.normal()
+        X[t] = 0.85 + X[t-1] + np.random.normal()
+    reg = sm.OLS(Y, sm.add_constant(X)).fit()
+    return reg.rsquared, reg.tvalues[1]
+
+# Run 1,000 times for T = 100, 500, 1000
+for T in [100, 500, 1000]:
+    results = [monte_carlo(T) for _ in range(1000)]
+    rsq, tstat = zip(*results)
+    print(T, np.percentile(rsq, [5,50,95]))</pre>
+
+          <h3>PS6 — Ridge & Lasso with Cross-Validation (k=2,065)</h3>
+          <pre style="background:var(--cream);padding:1rem;font-family:'DM Mono',monospace;font-size:0.78rem;overflow-x:auto;line-height:1.6;border:1px solid var(--border);">kf = KFold(n_splits=10, shuffle=True, random_state=13)
+ridge = RidgeCV(alphas=np.logspace(-3,3,100), cv=kf)
+lasso = LassoCV(cv=kf, max_iter=10000)
+ridge.fit(X_train, y_train)
+lasso.fit(X_train, y_train)
+# Compare out-of-sample MSFE vs. OLS baseline</pre>
+
+          <h3>Midterm — Gender Gap Replication (Nollenberger et al. 2016)</h3>
+          <pre style="background:var(--cream);padding:1rem;font-family:'DM Mono',monospace;font-size:0.78rem;overflow-x:auto;line-height:1.6;border:1px solid var(--border);">fmale_slopes = {}
+for background, group in GGapData.groupby("background"):
+    X = sm.add_constant(group["female"])
+    reg = sm.OLS(group["pv5math"], X).fit()
+    fmale_slopes[background] = reg.params["female"]
+
+GGapData["MGGap"] = GGapData["background"].map(fmale_slopes)
+plt.scatter(GGapData["ggi"], GGapData["MGGap"])
+# Overlay OLS fit line: math gender gap ~ gender equality index</pre>
+        `
+      }
+    ]
+  },
+  'findex-deck': {
+    tabs: ['Overview', 'Slides'],
+    panes: [
+      { type: 'overview' },
+      {
+        type: 'slides',
+        slides: [
+          { num: 'Slide 01', title: 'FINDEX', body: 'By Harminder Singh & Harris Waseem. Financial Index Engine — presented December 2025.' },
+          { num: 'Slide 02', title: 'Table of Contents', body: 'What is FINDEX? → The Problem & Opportunity → Our Background → Platform Capabilities → Market Positioning → Strategic Focus → Goals & Competitive Advantage → SWOT → Target Market → Product & Pricing → Conclusion.' },
+          { num: 'Slide 03', title: 'FINDEX: Financial Index Engine', body: 'A SaaS-based financial article aggregation and indexing engine that tokenizes, ranks, and curates financial news for individual investors and organizations.' },
+          { num: 'Slide 04', title: 'The Problem FINDEX Addresses', body: 'Financial information is fragmented, unstructured, and time-consuming to process. Institutional tools are powerful but prohibitively expensive (~$25K/yr). Free platforms lack depth and prioritization. Demand for data-driven tools is growing rapidly among non-institutional users.' },
+          { num: 'Slide 05', title: 'Company Overview', body: 'Founded 2025. Cloud-based SaaS. Modular architecture for scalable growth. Backed by finance students and young professionals with technical and market expertise.' },
+          { num: 'Slide 06', title: 'Platform Capabilities', body: 'Aggregates financial articles from reputable sources. Tokenizes key terms to filter noise. Ranks data based on correlation with market activity. Delivers insights through a clean, accessible dashboard.' },
+          { num: 'Slide 07', title: 'Where FINDEX Fits', body: 'Positioned between free consumer tools and expensive institutional platforms — the affordable, professional-grade alternative for the underserved middle market.' },
+          { num: 'Slide 08', title: 'Strategic Focus & Mission', body: 'Mission: Democratize financial information. Deliver affordable, accurate, actionable insights via a SaaS platform. Serve both B2C and B2B segments.' },
+          { num: 'Slide 09', title: 'Goals & Competitive Advantage', body: '1,500 users in 18 months. Enterprise launch by Year 2. Profitability by Year 3. Competitive moat: proprietary AI tokenization and article ranking engine.' },
+          { num: 'Slide 10', title: 'SWOT Analysis', body: 'Strengths: affordable pricing, simple UI. Weaknesses: new brand, limited funding. Opportunities: students, small firms, university partnerships. Threats: Bloomberg, FactSet incumbency.' },
+          { num: 'Slide 11', title: 'Target Market & Positioning', body: 'Primary: finance students, individual investors, professionals priced out of Bloomberg. Secondary: small firms, universities. Positioning: "The Affordable Bloomberg Alternative."' },
+          { num: 'Slide 12', title: 'Product & Pricing', body: 'Free: limited access. Pro: $20/month — full features, sector customization, keyword alerts. Enterprise: $75/month — API access, team dashboards, portfolio recognition.' },
+          { num: 'Slide 13', title: 'Conclusion', body: 'FINDEX addresses a growing demand for accessible financial analytics. Balances professional-grade insight with consumer-friendly pricing. Positioned to scale from individual users to enterprise clients. A practical, realistic entry into a rapidly growing analytics market.' },
+        ]
+      }
+    ]
+  }
+};
+
+// ════════════════════
+//  RENDER PROJECT CARDS
+// ════════════════════
+let activeFilter = 'all';
+
+function renderProjects(filter) {
+  const grid = document.getElementById('projectsGrid');
+  const filtered = filter === 'all'
+    ? projects
+    : projects.filter(p => p.type === filter || p.tags.includes(filter));
+
+  grid.innerHTML = filtered.map(p => `
+    <div class="project-card reveal" data-id="${p.id}">
+      <div class="card-meta">
+        <span class="card-type ${p.type}">${p.type === 'excel' ? '📊 Excel' : p.type === 'word' ? '📄 Word' : p.type === 'ipynb' ? '🐍 Jupyter' : '📑 PowerPoint'}</span>
+        ${p.course ? `<span class="card-tag" style="margin:0">${p.course}</span>` : ''}
+        <span class="card-date">${p.date}</span>
+      </div>
+      <h3 class="card-title">${p.title}</h3>
+      <p class="card-desc">${p.desc}</p>
+      <div class="card-tags">${p.tags.map(t => `<span class="card-tag">${t}</span>`).join('')}</div>
+      <div class="card-actions">
+        <button class="card-btn primary" onclick="openPreview('${p.id}')">Preview</button>
+        <button class="card-btn" onclick="openDetails('${p.id}')">Details</button>
+      </div>
+    </div>
+  `).join('');
+
+  requestAnimationFrame(() => {
+    grid.querySelectorAll('.reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    });
+  });
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    renderProjects(activeFilter);
+  });
+});
+
+// ════════════════════
+//  PREVIEW PANEL
+// ════════════════════
+let currentProject = null;
+let currentTab = 0;
+
+function openPreview(id) {
+  currentProject = projects.find(p => p.id === id);
+  const content = previewContent[id];
+  currentTab = 0;
+
+  document.getElementById('prevTitle').textContent = currentProject.title;
+  const badge = document.getElementById('prevBadge');
+  badge.textContent = currentProject.type === 'excel' ? '📊 Excel' : currentProject.type === 'word' ? '📄 Word' : currentProject.type === 'ipynb' ? '🐍 Jupyter' : '📑 PowerPoint';
+  badge.className = `preview-badge ${currentProject.type}`;
+  const fileLabel = currentProject.file ? ` · ${currentProject.file}` : '';
+  document.getElementById('prevNote').textContent = `${currentProject.course ? currentProject.course + ' · ' : ''}${currentProject.date}${fileLabel}`;
+
+  // Build tabs
+  const tabBar = document.getElementById('prevTabs');
+  tabBar.innerHTML = content.tabs.map((t, i) =>
+    `<button class="preview-tab ${i === 0 ? 'active' : ''}" onclick="switchTab(${i})">${t}</button>`
+  ).join('');
+
+  renderPane(0, id);
+
+  document.getElementById('previewOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function switchTab(idx) {
+  currentTab = idx;
+  document.querySelectorAll('.preview-tab').forEach((t, i) =>
+    t.classList.toggle('active', i === idx));
+  renderPane(idx, currentProject.id);
+}
+
+function renderPane(idx, id) {
+  const pane = previewContent[id].panes[idx];
+  const body = document.getElementById('prevBody');
+
+  if (pane.type === 'overview') {
+    const p = projects.find(x => x.id === id);
+    body.innerHTML = `<div class="pane overview-pane active">
+      <div class="ov-section">
+        <div class="ov-label">About This Project</div>
+        <p class="ov-text">${p.desc}</p>
+      </div>
+      <div class="ov-section">
+        <div class="ov-label">Key Highlights</div>
+        <ul class="ov-features">${p.features.map(f => `<li>${f}</li>`).join('')}</ul>
+      </div>
+      ${p.keyStats ? `<div class="ov-section">
+        <div class="ov-label">At a Glance</div>
+        <div class="ov-grid">${p.keyStats.map(s => `<div class="ov-stat"><div class="ov-stat-num">${s.num}</div><div class="ov-stat-label">${s.label}</div></div>`).join('')}</div>
+      </div>` : ''}
+    </div>`;
+  } else if (pane.type === 'data') {
+    body.innerHTML = `<div class="pane data-pane active">
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr>${pane.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>${pane.rows.map(row => `<tr>${row.map((cell, i) => {
+            const cls = (i > 0 && !isNaN(parseFloat(cell.replace(/[$,%+−]/g, '')))) ? 'num' : '';
+            const green = cell.includes('+') && !cell.includes('−') ? 'pos' : '';
+            const red = cell.includes('−') || cell.includes('−') ? 'neg' : '';
+            return `<td class="${[cls, green, red].filter(Boolean).join(' ')}">${cell}</td>`;
+          }).join('')}</tr>`).join('')}</tbody>
+        </table>
+      </div>
+      ${pane.notes ? `<p style="font-size:0.78rem;color:var(--muted);margin-top:1rem;font-family:'DM Mono',monospace;">${pane.notes}</p>` : ''}
+    </div>`;
+  } else if (pane.type === 'content') {
+    body.innerHTML = `<div class="pane content-pane active">${pane.html}</div>`;
+  } else if (pane.type === 'slides') {
+    body.innerHTML = `<div class="pane slides-pane active">
+      <div class="slides-grid">${pane.slides.map(s => `
+        <div class="slide-card">
+          <div class="slide-num">${s.num}</div>
+          <div class="slide-title">${s.title}</div>
+          <div class="slide-body">${s.body}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+}
+
+function triggerDownload() {
+  if (!currentProject || !currentProject.file) {
+    alert('No file linked for this project yet.');
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = currentProject.file;
+  a.download = currentProject.file;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function closePreview() {
+  document.getElementById('previewOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closePanelOnOverlay(e) {
+  if (e.target === document.getElementById('previewOverlay')) closePreview();
+}
+
+// ════════════════════
+//  DETAILS MODAL
+// ════════════════════
+function openDetails(id) {
+  const p = projects.find(x => x.id === id);
+  alert(`"${p.title}" — ${p.desc}\n\nKey features:\n• ${p.features.join('\n• ')}`);
+}
+
+// CONTACT
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.form-submit');
+  btn.textContent = 'Message Sent ✓';
+  btn.style.background = '#2e7d32';
+  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; e.target.reset(); }, 3000);
+}
+
+// ESC key
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePreview(); });
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(el => { if (el.isIntersecting) { el.target.classList.add('visible'); observer.unobserve(el.target); } });
+}, { threshold: 0.1 });
+function observeReveal() { document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
+
+// INIT
+renderProjects('all');
+observeReveal();
+</script>
+</body>
+</html>
