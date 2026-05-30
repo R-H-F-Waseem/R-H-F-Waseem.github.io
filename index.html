@@ -73,15 +73,70 @@
 
 
     /* Dark mode toggle button */
-    .theme-toggle {
-      background: none; border: 1.5px solid var(--border);
-      color: var(--muted); cursor: pointer;
-      width: 36px; height: 36px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; transition: border-color 0.2s, color 0.2s;
+    /* ── THEME SWITCH ── */
+    /* ── THEME TOGGLE ── */
+    .theme-switch {
+      position: relative;
+      width: 88px; height: 28px;
       flex-shrink: 0;
+      cursor: pointer;
+      display: block;
     }
-    .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    .theme-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+    /* Outer track */
+    .theme-switch-track {
+      position: absolute; inset: 0;
+      border: 1.5px solid var(--border);
+      background: var(--cream);
+      display: flex;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    /* Sliding filled block */
+    .theme-switch-thumb {
+      position: absolute;
+      top: 0; left: 0;
+      width: 50%; height: 100%;
+      background: var(--ink);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+    }
+    html.dark .theme-switch-thumb {
+      transform: translateX(100%);
+    }
+
+    /* DAY / NIGHT labels */
+    .theme-switch-track::before,
+    .theme-switch-track::after {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      z-index: 1;
+      transition: color 0.3s;
+      pointer-events: none;
+    }
+    .theme-switch-track::before {
+      content: '◼';
+      left: 0; width: 50%;
+      text-align: center;
+      color: var(--paper); /* active side — on dark fill */
+    }
+    .theme-switch-track::after {
+      content: '◻';
+      right: 0; width: 50%;
+      text-align: center;
+      color: var(--muted); /* inactive side */
+    }
+    html.dark .theme-switch-track::before {
+      color: var(--muted); /* now inactive */
+    }
+    html.dark .theme-switch-track::after {
+      color: var(--paper); /* now active — on dark fill */
+    }
 
     html { scroll-behavior: smooth; }
     body { background: var(--paper); color: var(--ink); font-family: 'Syne', sans-serif; overflow-x: hidden; }
@@ -108,10 +163,12 @@
     .nav-links a:hover { color: var(--ink); }
     .nav-cta { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.55rem 1.4rem; border: 1.5px solid var(--ink); color: var(--ink); text-decoration: none; transition: background 0.2s, color 0.2s; }
     .nav-cta:hover { background: var(--ink); color: var(--paper); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
 
     /* HERO */
     .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 8rem 3rem 4rem; gap: 4rem; position: relative; overflow: hidden; }
-    .hero::after { content: ''; position: absolute; right: -120px; top: 50%; transform: translateY(-50%); width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle, rgba(184,146,42,0.12) 0%, transparent 70%); pointer-events: none; }
+    .hero::after { content: ''; position: absolute; right: -120px; top: 50%; transform: translateY(-50%); width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle, rgba(184,146,42,0.12) 0%, transparent 70%); pointer-events: none; transition: opacity 0.3s; }
+    html.dark .hero::after { opacity: 0.03; }
     .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold); padding: 0.35rem 0.9rem; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.1s; }
     .hero-tag::before { content: '◆'; font-size: 0.5rem; }
     .hero-title { font-family: 'DM Serif Display', serif; font-size: clamp(3rem, 5.5vw, 5.5rem); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.75rem; opacity: 0; animation: fadeUp 0.7s ease forwards 0.25s; }
@@ -355,19 +412,127 @@
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.visible { opacity: 1; transform: none; }
 
+    /* ── HAMBURGER MENU ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--ink);
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: var(--paper);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem;
+      flex-direction: column;
+      gap: 0;
+      z-index: 99;
+      backdrop-filter: blur(12px);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--ink); }
+
+    /* ── 900px TABLET ── */
     @media (max-width: 900px) {
+      /* Nav */
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
-      .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+      .hamburger { display: flex; }
+      .nav-right { display: flex; align-items: center; gap: 0.75rem; }
+
+      /* Hero */
+      .hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; gap: 2rem; }
       .hero-right { display: none; }
-      section { padding: 4rem 1.5rem; }
-      #about { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-title { font-size: clamp(2.4rem, 8vw, 4rem); }
+      .hero-body { font-size: 0.95rem; max-width: 100%; }
+      .hero-actions { flex-direction: column; }
+      .btn-primary, .btn-secondary { text-align: center; }
+
+      /* Sections */
+      section { padding: 3.5rem 1.5rem; }
+      #about { grid-template-columns: 1fr; gap: 2rem; }
       .about-sticky { position: static; }
+      .about-title { font-size: 2rem; }
       .section-divider { margin: 0 1.5rem; }
-      footer { flex-direction: column; gap: 1rem; text-align: center; }
-      .preview-panel { width: 98vw; max-height: 96vh; }
-      .ov-grid { grid-template-columns: 1fr; }
+      .section-title { font-size: clamp(1.8rem, 6vw, 2.5rem); }
+
+      /* Skills */
+      .skills-grid { grid-template-columns: 1fr; }
+
+      /* Filter bar */
+      .filter-bar { gap: 0.4rem; }
+      .filter-btn { padding: 0.5rem 0.9rem; font-size: 0.68rem; }
+
+      /* Project cards — 1 column */
+      .projects-grid { grid-template-columns: 1fr; }
+
+      /* Preview panel */
+      .preview-panel { width: 100vw; max-height: 100dvh; margin: 0; border-radius: 0; border-left: none; border-right: none; }
+      .preview-overlay { padding: 0; align-items: flex-end; }
+      .preview-header { padding: 1rem 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+      .preview-title { font-size: 1rem; }
+      .preview-tabs { overflow-x: auto; scrollbar-width: none; }
+      .preview-tabs::-webkit-scrollbar { display: none; }
+      .preview-tab { white-space: nowrap; padding: 0.65rem 1rem; font-size: 0.68rem; }
+      .overview-pane { padding: 1.25rem; }
+      .content-pane { padding: 1.25rem; }
+      .data-pane { padding: 1rem; }
+      .slides-pane { padding: 1.25rem; }
+      .ov-grid { grid-template-columns: 1fr 1fr; }
       .slides-grid { grid-template-columns: 1fr; }
+      .preview-footer { padding: 0.85rem 1.25rem; }
+
+      /* Data tables — scroll horizontally */
+      .data-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .data-table { min-width: 520px; }
+
+      /* Contact form */
+      .contact-form { padding: 0 0.25rem; }
+
+      /* Footer */
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 1.5rem; }
+    }
+
+    /* ── 480px MOBILE ── */
+    @media (max-width: 480px) {
+      .hero-tag { font-size: 0.62rem; padding: 0.3rem 0.7rem; }
+      .hero-title { font-size: clamp(2rem, 10vw, 2.8rem); }
+      .stat-card { padding: 1.25rem 1rem; }
+      .card-title { font-size: 1.15rem; }
+      .preview-panel { max-height: 96dvh; }
+      .ov-grid { grid-template-columns: 1fr; }
+      .preview-header { gap: 0.4rem; }
+      .preview-badge { font-size: 0.6rem; }
+      pre { font-size: 0.7rem !important; }
+      .nav-cta { display: none; } /* hide CTA on very small screens, hamburger has it */
     }
   </style>
 </head>
@@ -381,11 +546,25 @@
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <div style="display:flex;align-items:center;gap:0.75rem;">
-  <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
-  <a href="#contact" class="nav-cta">Get in touch</a>
-</div>
+  <div class="nav-right">
+    <label class="theme-switch" id="themeLabel" title="Switch to dark mode">
+      <input type="checkbox" id="themeToggle" />
+      <div class="theme-switch-track"></div>
+      <div class="theme-switch-thumb"></div>
+    </label>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
+
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#projects" onclick="closeMobileMenu()">Projects</a>
+  <a href="#about" onclick="closeMobileMenu()">About</a>
+  <a href="#contact" onclick="closeMobileMenu()">Get in Touch</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="home">
@@ -1100,6 +1279,29 @@ function closePanelOnOverlay(e) {
   if (e.target === document.getElementById('previewOverlay')) closePreview();
 }
 
+
+// ════════════════════
+//  HAMBURGER MENU
+// ════════════════════
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+});
+
+// Close on outside click
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('mobileMenu');
+  const burger = document.getElementById('hamburger');
+  if (menu.classList.contains('open') && !menu.contains(e.target) && !burger.contains(e.target)) {
+    closeMobileMenu();
+  }
+});
+
 // CONTACT
 async function handleSubmit(e) {
   e.preventDefault();
@@ -1169,17 +1371,20 @@ function observeReveal() { document.querySelectorAll('.reveal').forEach(el => ob
   }
 })();
 
-function toggleTheme() {
-  const isDark = document.documentElement.classList.toggle('dark');
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('themeToggle');
-  const isDark = document.documentElement.classList.contains('dark');
-  btn.textContent = isDark ? '☀️' : '🌙';
-  btn.addEventListener('click', toggleTheme);
+  const toggle = document.getElementById('themeToggle');
+  toggle.checked = document.documentElement.classList.contains('dark');
+  const label = document.getElementById('themeLabel');
+  const updateTitle = (isDark) => {
+    label.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+  };
+  updateTitle(toggle.checked);
+  toggle.addEventListener('change', () => {
+    const isDark = toggle.checked;
+    document.documentElement.classList.toggle('dark', isDark);
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    updateTitle(isDark);
+  });
 });
 
 // INIT
