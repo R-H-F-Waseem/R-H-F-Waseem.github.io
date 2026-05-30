@@ -138,6 +138,94 @@
       color: var(--paper); /* now active — on dark fill */
     }
 
+
+    /* ── 1. SCROLL PROGRESS BAR ── */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px;
+      width: 0%; background: var(--gold);
+      z-index: 9999; transition: width 0.1s linear;
+    }
+
+    /* ── 2. BACK TO TOP ── */
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 40px; height: 40px;
+      background: var(--ink); color: var(--paper);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; z-index: 200;
+      opacity: 0; pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.3s, transform 0.3s, background 0.2s;
+      font-family: 'DM Mono', monospace;
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .back-to-top:hover { background: var(--gold); }
+
+    /* ── 3. ACTIVE NAV LINK ── */
+    .nav-links a.nav-active { color: var(--ink); }
+    .nav-links a.nav-active::after {
+      content: '';
+      display: block;
+      height: 1.5px;
+      background: var(--gold);
+      margin-top: 2px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* ── 4. TYPED HERO ── */
+    .typed-cursor {
+      display: inline-block;
+      width: 2px; height: 1em;
+      background: var(--gold);
+      margin-left: 3px;
+      vertical-align: text-bottom;
+      animation: blink 0.9s step-end infinite;
+    }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* ── 5. CARD TILT ── */
+    .project-card { transform-style: preserve-3d; will-change: transform; }
+
+    /* ── 6. COPY EMAIL ── */
+    .copy-email-wrap {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+    .copy-email-addr {
+      font-family: 'DM Mono', monospace; font-size: 0.82rem;
+      color: var(--gold); letter-spacing: 0.04em;
+    }
+    .copy-email-btn {
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border: 1.5px solid var(--border); background: transparent;
+      color: var(--muted); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-email-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .copy-email-btn.copied { border-color: #2e7d32; color: #2e7d32; }
+
+    /* ── 7. FILTER COUNT BADGES ── */
+    .filter-count {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      background: var(--gold);
+      color: var(--paper);
+      padding: 0.05rem 0.35rem;
+      margin-left: 0.3rem;
+      vertical-align: middle;
+      transition: background 0.2s, color 0.2s;
+      opacity: 0.75;
+    }
+    .filter-btn.active .filter-count {
+      background: var(--paper);
+      color: var(--ink);
+      opacity: 1;
+    }
+
     html { scroll-behavior: smooth; }
     body { background: var(--paper); color: var(--ink); font-family: 'Syne', sans-serif; overflow-x: hidden; }
 
@@ -538,6 +626,9 @@
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress"></div>
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo"><span>H</span>arris <span>W</span>aseem</a>
@@ -569,7 +660,7 @@
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-left">
-    <div class="hero-tag">Financial Analysis Portfolio</div>
+    <div class="hero-tag">◆ <span id="typedText"></span><span class="typed-cursor"></span></div>
     <h1 class="hero-title">Where <em>my</em><br>analysis lives</h1>
     <p class="hero-body">A collection of Excel models, Word reports, and presentations spanning DCF valuations, M&amp;A evaluations, trading analyses, and SaaS strategy — built from real coursework and market research.</p>
     <div class="hero-actions">
@@ -630,6 +721,10 @@
     <p>I'm Harris Waseem — a finance and data analyst with 4+ years of active trading experience focused on options and technical analysis. My academic and personal work spans DCF modeling, M&amp;A evaluation, and market strategy, bridging quantitative rigor with real trading intuition.</p>
     <p>My projects draw on Bloomberg terminal data, multi-year company financials, and original WACC/FCF frameworks — applied to real companies like Stryker Corporation, and real markets I've traded actively.</p>
     <p>Alongside financial modeling, I co-founded FINDEX, a SaaS-based financial article aggregation engine designed to democratize access to institutional-quality market data.</p>
+    <div class="copy-email-wrap">
+      <span class="copy-email-addr">rhf.h.waseem@gmail.com</span>
+      <button class="copy-email-btn" id="copyEmailBtn" onclick="copyEmail()">Copy</button>
+    </div>
     <div class="skills-grid">
       <div class="skill-item">
         <div class="skill-name">DCF Modeling</div>
@@ -1160,6 +1255,7 @@ function renderProjects(filter) {
       setTimeout(() => el.classList.add('visible'), i * 80);
     });
   });
+  initTilt();
 }
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -1387,9 +1483,117 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+
+// ════════════════════
+//  1. SCROLL PROGRESS
+// ════════════════════
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+
+  // ── 2. BACK TO TOP visibility
+  const btn = document.getElementById('backToTop');
+  if (scrollTop > 400) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+
+  // ── 3. ACTIVE NAV LINK
+  const sections = ['home','projects','about','contact'];
+  let current = 'home';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('nav-active',
+      a.getAttribute('href') === '#' + current ||
+      (current === 'home' && a.getAttribute('href') === '#'));
+  });
+}, { passive: true });
+
+// ════════════════════
+//  4. TYPED HERO TEXT
+// ════════════════════
+(function() {
+  const phrases = [
+    'Financial Analyst',
+    'Options Trader',
+    'DCF Modeler',
+    'Co-founder @ FINDEX',
+    'Econometrician'
+  ];
+  let pi = 0, ci = 0, deleting = false;
+  const el = document.getElementById('typedText');
+  if (!el) return;
+  function tick() {
+    const phrase = phrases[pi];
+    if (!deleting) {
+      el.textContent = phrase.slice(0, ++ci);
+      if (ci === phrase.length) { deleting = true; setTimeout(tick, 1800); return; }
+      setTimeout(tick, 55);
+    } else {
+      el.textContent = phrase.slice(0, --ci);
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 400); return; }
+      setTimeout(tick, 30);
+    }
+  }
+  setTimeout(tick, 800);
+})();
+
+// ════════════════════
+//  5. CARD TILT
+// ════════════════════
+function initTilt() {
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - 0.5;
+      const y = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.transform = `perspective(600px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
+
+// ════════════════════
+//  6. COPY EMAIL
+// ════════════════════
+function copyEmail() {
+  navigator.clipboard.writeText('rhf.h.waseem@gmail.com').then(() => {
+    const btn = document.getElementById('copyEmailBtn');
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2500);
+  });
+}
+
+// ════════════════════
+//  7. FILTER COUNTS
+// ════════════════════
+function updateFilterCounts() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    const filter = btn.dataset.filter;
+    const count = filter === 'all'
+      ? projects.length
+      : projects.filter(p => p.type === filter || p.tags.includes(filter)).length;
+    const existing = btn.querySelector('.filter-count');
+    if (existing) existing.remove();
+    const badge = document.createElement('span');
+    badge.className = 'filter-count';
+    badge.textContent = count;
+    btn.appendChild(badge);
+  });
+}
+
+
 // INIT
 renderProjects('all');
 observeReveal();
+initTilt();
+updateFilterCounts();
 </script>
 </body>
 </html>
