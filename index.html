@@ -226,6 +226,63 @@
       opacity: 1;
     }
 
+
+    /* ── RESUME SECTION ── */
+    #resume { background: var(--cream); }
+    .resume-download {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.7rem 1.6rem; background: var(--ink); color: var(--paper);
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; text-decoration: none;
+      transition: background 0.2s, transform 0.2s; margin-bottom: 3rem;
+    }
+    .resume-download:hover { background: var(--gold); transform: translateY(-2px); }
+    .resume-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+    .resume-block { }
+    .resume-block-title {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1.25rem; padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .resume-item { margin-bottom: 1.75rem; }
+    .resume-item:last-child { margin-bottom: 0; }
+    .resume-item-head {
+      display: flex; justify-content: space-between;
+      align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.25rem;
+    }
+    .resume-role { font-family: 'DM Serif Display', serif; font-size: 1.2rem; letter-spacing: -0.01em; }
+    .resume-date { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+    .resume-org { font-size: 0.85rem; font-weight: 700; color: var(--gold); margin-bottom: 0.6rem; }
+    .resume-loc { font-size: 0.75rem; color: var(--muted); font-weight: 400; }
+    .resume-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.7; margin-bottom: 0.6rem; font-style: italic; }
+    .resume-bullets { list-style: none; }
+    .resume-bullets li {
+      font-size: 0.875rem; color: var(--muted); line-height: 1.7;
+      padding: 0.25rem 0 0.25rem 1.25rem; position: relative;
+    }
+    .resume-bullets li::before {
+      content: '→'; color: var(--gold);
+      position: absolute; left: 0;
+    }
+    .resume-edu-school { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.3rem; }
+    .resume-certs { font-size: 0.82rem; color: var(--muted); margin-top: 0.5rem; }
+    .resume-skills-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    .resume-skill-row { }
+    .resume-skill-cat {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--ink); margin-bottom: 0.4rem;
+    }
+    .resume-skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .resume-skill-tag {
+      font-size: 0.72rem; background: var(--paper);
+      border: 1px solid var(--border); padding: 0.3rem 0.7rem;
+      color: var(--muted); font-family: 'DM Mono', monospace;
+    }
+    @media (min-width: 720px) {
+      .resume-skills-grid { grid-template-columns: 1fr 1fr; }
+    }
+
     html { scroll-behavior: smooth; }
     body { background: var(--paper); color: var(--ink); font-family: 'Syne', sans-serif; overflow-x: hidden; }
 
@@ -635,6 +692,7 @@
   <ul class="nav-links">
     <li><a href="#projects">Projects</a></li>
     <li><a href="#about">About</a></li>
+    <li><a href="#resume">Resume</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-right">
@@ -654,6 +712,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <a href="#projects" onclick="closeMobileMenu()">Projects</a>
   <a href="#about" onclick="closeMobileMenu()">About</a>
+  <a href="#resume" onclick="closeMobileMenu()">Resume</a>
   <a href="#contact" onclick="closeMobileMenu()">Get in Touch</a>
 </div>
 
@@ -751,6 +810,129 @@
         <div class="skill-bar"><div class="skill-bar-fill" style="width:78%"></div></div>
       </div>
     </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- RESUME -->
+<section id="resume">
+  <div class="section-header reveal">
+    <span class="section-num">02 —</span>
+    <h2 class="section-title">Resume</h2>
+  </div>
+
+  <a href="Harris_Waseem_Resume.pdf" download class="resume-download reveal">↓ Download PDF</a>
+
+  <div class="resume-grid">
+
+    <!-- EDUCATION -->
+    <div class="resume-block reveal">
+      <div class="resume-block-title">Education</div>
+      <div class="resume-item">
+        <div class="resume-item-head">
+          <div class="resume-role">BBA in Financial Technology &amp; BA in Economics</div>
+          <div class="resume-date">June 2021 – June 2026</div>
+        </div>
+        <div class="resume-edu-school">City University of New York, Queens College</div>
+        <div class="resume-certs"><strong>Certificates:</strong> Bloomberg Market Concepts, Finance Fundamentals, Spreadsheet Analysis</div>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="resume-block reveal">
+      <div class="resume-block-title">Experience</div>
+
+      <div class="resume-item">
+        <div class="resume-item-head">
+          <div class="resume-role">Data Analyst Intern <span class="resume-loc">· Remote, NY</span></div>
+          <div class="resume-date">March 2026 – Present</div>
+        </div>
+        <div class="resume-org">Maroon</div>
+        <div class="resume-desc">Evaluated onboarding, funnel progression, user feedback, and product friction across a beta-stage product to identify data gaps, retention risks, and high-impact UX improvements.</div>
+        <ul class="resume-bullets">
+          <li>Built a funnel KPI framework covering onboarding, profile completion, conversation engagement, and paywall conversion.</li>
+          <li>Analyzed Android/iOS beta flows and identified profile crashes, waitlist friction, and UI controls as blockers to retention.</li>
+          <li>Recommended product improvements including crash tracking, cohort flags, compatibility fixes, and intent filtering.</li>
+        </ul>
+      </div>
+
+      <div class="resume-item">
+        <div class="resume-item-head">
+          <div class="resume-role">Data Analyst Intern <span class="resume-loc">· Manhattan, NY</span></div>
+          <div class="resume-date">March 2025 – May 2025</div>
+        </div>
+        <div class="resume-org">NYC Department of Transportation</div>
+        <div class="resume-desc">Worked with the Public Engagement Group to collect, clean, and structure field data for deliverable development as part of the DOT's street-safety initiative.</div>
+        <ul class="resume-bullets">
+          <li>Streamlined urban planning data by automating geospatial datasets using ArcGIS and Power Query.</li>
+          <li>Developed reusable Power Query ('M') templates that cut manual data cleaning from ~2 days to under 30 minutes.</li>
+          <li>Centralized and standardized the monthly reporting pipeline, improving data consistency across cross-functional teams.</li>
+        </ul>
+      </div>
+
+      <div class="resume-item">
+        <div class="resume-item-head">
+          <div class="resume-role">Client Data Operations Coordinator <span class="resume-loc">· Rockville Centre, NY</span></div>
+          <div class="resume-date">Aug 2025 – Sep 2025</div>
+        </div>
+        <div class="resume-org">IMS NY Service Corporation</div>
+        <div class="resume-desc">Compiled, verified, and structured provider information while communicating credentialing requirements between clients, physicians, and internal verification teams.</div>
+        <ul class="resume-bullets">
+          <li>Managed data intake and onboarding workflows for physicians and clients to update internal and external eDHR systems.</li>
+          <li>Conducted client consultations with independent physicians to assess operational needs and guide onboarding.</li>
+          <li>Automated extraction and cleaning of 5,000+ records using Power Query, reducing processing from ~3 days to under 10 minutes.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TECHNICAL SKILLS -->
+    <div class="resume-block reveal">
+      <div class="resume-block-title">Technical Skills</div>
+      <div class="resume-skills-grid">
+        <div class="resume-skill-row">
+          <div class="resume-skill-cat">Software &amp; Tools</div>
+          <div class="resume-skill-tags">
+            <span class="resume-skill-tag">Advanced Excel (VBA &amp; Macros)</span>
+            <span class="resume-skill-tag">Bloomberg Terminal</span>
+            <span class="resume-skill-tag">EViews</span>
+            <span class="resume-skill-tag">ArcGIS</span>
+            <span class="resume-skill-tag">Salesforce/Agentforce</span>
+            <span class="resume-skill-tag">MS Office Suite</span>
+          </div>
+        </div>
+        <div class="resume-skill-row">
+          <div class="resume-skill-cat">Programming Languages</div>
+          <div class="resume-skill-tags">
+            <span class="resume-skill-tag">Python</span>
+            <span class="resume-skill-tag">C++</span>
+            <span class="resume-skill-tag">Rust</span>
+            <span class="resume-skill-tag">R</span>
+            <span class="resume-skill-tag">SQL</span>
+            <span class="resume-skill-tag">'M' Formula Language</span>
+          </div>
+        </div>
+        <div class="resume-skill-row">
+          <div class="resume-skill-cat">Visualization</div>
+          <div class="resume-skill-tags">
+            <span class="resume-skill-tag">Power BI</span>
+            <span class="resume-skill-tag">Tableau</span>
+            <span class="resume-skill-tag">Looker</span>
+          </div>
+        </div>
+        <div class="resume-skill-row">
+          <div class="resume-skill-cat">Analytics</div>
+          <div class="resume-skill-tags">
+            <span class="resume-skill-tag">Funnel Analysis</span>
+            <span class="resume-skill-tag">KPI Development</span>
+            <span class="resume-skill-tag">Product Analytics</span>
+            <span class="resume-skill-tag">Statistical Modeling</span>
+            <span class="resume-skill-tag">Dashboard Reporting</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1499,7 +1681,7 @@ window.addEventListener('scroll', () => {
   else btn.classList.remove('visible');
 
   // ── 3. ACTIVE NAV LINK
-  const sections = ['home','projects','about','contact'];
+  const sections = ['home','projects','about','resume','contact'];
   let current = 'home';
   sections.forEach(id => {
     const el = document.getElementById(id);
